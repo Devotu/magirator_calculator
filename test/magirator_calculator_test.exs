@@ -3,18 +3,31 @@ defmodule MagiratorCalculatorTest do
   doctest MagiratorCalculator
 
   test "calculate points" do
-    results = 
-      [
-        %{comment: "Third result", created: 1552337401729, id: 32, place: 1}, 
-        %{comment: "First result", created: 1552337401701, id: 30, place: 1},
-      ]
-
+    results = [
+      %{id: 20, games: 10, losses: 2, wins: 8}, 
+      %{id: 21, games: 5, losses: 3, wins: 2}
+    ]
     points = MagiratorCalculator.calculate_pdiff(results)
     assert is_number points
+    assert points == 6-1
+  end
+
+  test "calculate points with cap 3" do
+    results = [
+      %{id: 20, games: 10, losses: 2, wins: 8}, 
+      %{id: 21, games: 5, losses: 3, wins: 2},
+      %{id: 22, games: 10, losses: 10, wins: 5}, 
+    ]
+    points = MagiratorCalculator.calculate_pdiff_cap(results, 3)
+    assert is_number points
+    assert points == 3-1-3
   end
 
   test "calculate winrate" do
-    results = [%{id: 20, games: 5, losses: 1, wins: 4}, %{id: 21, games: 6, losses: 2, wins: 3}]
+    results = [
+      %{id: 20, games: 5, losses: 1, wins: 4}, 
+      %{id: 21, games: 6, losses: 2, wins: 3}
+    ]
     winrate = MagiratorCalculator.calculate_winrate(results)
     assert 63.6 = winrate
   end
