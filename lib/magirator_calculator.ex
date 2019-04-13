@@ -25,6 +25,19 @@ defmodule MagiratorCalculator do
   end
 
 
+  def calculate_pdist(results, _) when length(results) == 0 do
+    0 
+  end
+
+  def calculate_pdist(results, dist) do
+    results
+    |> Enum.map(&diff/1)
+    |> Enum.map(fn(x) -> enforceNegativeCap(x, 0) end)
+    |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
+    |> Enum.sum()
+  end
+
+
   def calculate_winrate(results) when length(results) == 0 do
     50.0    
   end
@@ -58,11 +71,18 @@ defmodule MagiratorCalculator do
     end
   end
 
-
   defp enforceNegativeCap(value, cap) do
     case value < -cap do
       :true -> -cap
       _ -> value        
     end
+  end
+
+
+  defp distributeByDistance(value, dist) do
+    value
+    |> Kernel.+(1)
+    |> Kernel./(dist)
+    |> trunc()
   end
 end
