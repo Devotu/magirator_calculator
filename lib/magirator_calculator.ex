@@ -32,6 +32,18 @@ defmodule MagiratorCalculator do
   def calculate_pdist(results, dist) do
     results
     |> Enum.map(&diff/1)
+    |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
+    |> Enum.sum()
+  end
+
+
+  def calculate_pdist_positive(results, _) when length(results) == 0 do
+    0 
+  end
+
+  def calculate_pdist_positive(results, dist) do
+    results
+    |> Enum.map(&diff/1)
     |> Enum.map(fn(x) -> enforceNegativeCap(x, 0) end)
     |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
     |> Enum.sum()
@@ -80,8 +92,22 @@ defmodule MagiratorCalculator do
 
 
   defp distributeByDistance(value, dist) do
+    case value > 1 do
+      :true -> distributeByPositiveDistance(value, dist)
+      _ -> distributeByNegativeDistance(value, dist)        
+    end
+  end
+
+  defp distributeByPositiveDistance(value, dist) do
     value
     |> Kernel.+(1)
+    |> Kernel./(dist)
+    |> trunc()
+  end
+
+  defp distributeByNegativeDistance(value, dist) do
+    value
+    |> Kernel.-(1)
     |> Kernel./(dist)
     |> trunc()
   end
