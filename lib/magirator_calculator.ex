@@ -92,7 +92,7 @@ defmodule MagiratorCalculator do
 
 
   defp distributeByDistance(value, dist) do
-    case value > 1 do
+    case value > 0 do
       :true -> distributeByPositiveDistance(value, dist)
       _ -> distributeByNegativeDistance(value, dist)        
     end
