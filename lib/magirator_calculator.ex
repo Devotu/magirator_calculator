@@ -69,6 +69,30 @@ defmodule MagiratorCalculator do
     Float.round((combined_results.wins / combined_results.games) * 100, 1)
   end
 
+  def count_games(results) do
+    results
+    |> Enum.map(&(&1.games))
+    |> Enum.sum()
+  end
+
+  def count_wins(results) do
+    results
+    |> Enum.map(&(&1.wins))
+    |> Enum.sum()
+  end
+
+  def count_losses(results) do
+    results
+    |> Enum.map(&(&1.losses))
+    |> Enum.sum()
+  end
+
+  def count_draws(results) do
+    results
+    |> Enum.map(&(&1.games - (&1.wins + &1.losses)))
+    |> Enum.sum()
+  end
+
 
   #Privates
   defp diff(result) do

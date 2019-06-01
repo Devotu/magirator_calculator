@@ -61,4 +61,36 @@ defmodule MagiratorCalculatorTest do
     winrate = MagiratorCalculator.calculate_winrate(results)
     assert 50.0 = winrate
   end
+
+  test "count games" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 11 = MagiratorCalculator.count_games(results)
+  end
+
+  test "count wins" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 7 = MagiratorCalculator.count_wins(results)
+  end
+
+  test "count draws" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 1 = MagiratorCalculator.count_draws(results)
+  end
+
+  test "count losses" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 3 = MagiratorCalculator.count_losses(results)
+  end
 end
