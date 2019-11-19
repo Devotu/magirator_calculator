@@ -2,7 +2,7 @@ defmodule MagiratorCalculatorTest do
   use ExUnit.Case
   doctest MagiratorCalculator
 
-  test "calculate points" do
+  test "calculate aggregated points" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2}, 
       %{id: 21, games: 5, wins: 2, losses: 3}
@@ -12,7 +12,7 @@ defmodule MagiratorCalculatorTest do
     assert points == 6-1
   end
 
-  test "calculate points with cap 3" do
+  test "calculate aggregated points with cap 3" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2}, 
       %{id: 21, games: 5, wins: 2, losses: 3},
@@ -23,7 +23,7 @@ defmodule MagiratorCalculatorTest do
     assert points == 3-1-3
   end
 
-  test "calculate points with dist 2" do
+  test "calculate aggregated points with dist 2" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2},
       %{id: 21, games: 5, wins: 2, losses: 3},
@@ -35,7 +35,7 @@ defmodule MagiratorCalculatorTest do
     assert points == 3-1-3+2
   end
 
-  test "calculate positive points with dist 2" do
+  test "calculate aggregated positive points with dist 2" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2}, 
       %{id: 21, games: 5, wins: 2, losses: 3},
@@ -47,7 +47,7 @@ defmodule MagiratorCalculatorTest do
     assert points == 3+0+0+2
   end
 
-  test "calculate winrate" do
+  test "calculate aggregated winrate" do
     results = [
       %{id: 20, games: 5, wins: 4, losses: 1}, 
       %{id: 21, games: 6, wins: 3, losses: 2}
@@ -56,13 +56,13 @@ defmodule MagiratorCalculatorTest do
     assert 63.6 = winrate
   end
 
-  test "calculate winrate no games" do
+  test "calculate aggregated winrate no games" do
     results = []
     winrate = MagiratorCalculator.calculate_winrate(results)
     assert 50.0 = winrate
   end
 
-  test "count games" do
+ test "count aggregated games" do
     results = [
       %{id: 20, games: 5, wins: 4, losses: 1}, 
       %{id: 21, games: 6, wins: 3, losses: 2}
@@ -70,7 +70,7 @@ defmodule MagiratorCalculatorTest do
     assert 11 = MagiratorCalculator.count_games(results)
   end
 
-  test "count wins" do
+ test "count aggregated wins" do
     results = [
       %{id: 20, games: 5, wins: 4, losses: 1}, 
       %{id: 21, games: 6, wins: 3, losses: 2}
@@ -78,7 +78,7 @@ defmodule MagiratorCalculatorTest do
     assert 7 = MagiratorCalculator.count_wins(results)
   end
 
-  test "count draws" do
+ test "count aggregated draws" do
     results = [
       %{id: 20, games: 5, wins: 4, losses: 1}, 
       %{id: 21, games: 6, wins: 3, losses: 2}
@@ -86,7 +86,7 @@ defmodule MagiratorCalculatorTest do
     assert 1 = MagiratorCalculator.count_draws(results)
   end
 
-  test "count losses" do
+ test "count aggregated losses" do
     results = [
       %{id: 20, games: 5, wins: 4, losses: 1}, 
       %{id: 21, games: 6, wins: 3, losses: 2}
