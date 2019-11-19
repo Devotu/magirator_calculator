@@ -93,4 +93,22 @@ defmodule MagiratorCalculatorTest do
     ]
     assert 3 = MagiratorCalculator.count_losses(results)
   end
+
+
+  test "count placings" do
+    results = [
+      %{place: 1},
+      %{place: 2},
+      %{place: 1, game_id: 40},
+      %{place: 2, other: %{things: "stuff"}},
+      %{place: 0},
+      %{place: 2},
+      %{place: 3},
+    ]
+    
+    %{wins: wins, draws: draws, losses: losses} = MagiratorCalculator.summarize_places(results)
+    assert wins == 2
+    assert draws == 1
+    assert losses == 4
+  end
 end

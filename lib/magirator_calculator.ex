@@ -135,4 +135,16 @@ defmodule MagiratorCalculator do
     |> Kernel./(dist)
     |> trunc()
   end
+
+  @doc """
+  Summarizes the occasions of places 1, 0 and 2+ as {wins, draws, losses}
+  Requires a list containing maps with a :place value
+  """
+  def summarize_places(results) do
+    %{
+      wins: Enum.count(results, fn x -> x.place == 1 end),   
+      draws: Enum.count(results, fn x -> x.place == 0 end),      
+      losses: Enum.count(results, fn x -> x.place >= 2 end)      
+    }
+  end
 end
