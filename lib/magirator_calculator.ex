@@ -1,22 +1,22 @@
 defmodule MagiratorCalculator do
 
   #Exposed
-  def calculate_pdiff(results) when length(results) == 0 do
+  def calculate_aggregate_pdiff(results) when length(results) == 0 do
     0 
   end
 
-  def calculate_pdiff(results) do
+  def calculate_aggregate_pdiff(results) do
     results
     |> Enum.map(&diff/1)
     |> Enum.sum()
   end
 
 
-  def calculate_pdiff_cap(results, _) when length(results) == 0 do
+  def calculate_aggregate_pdiff_cap(results, _) when length(results) == 0 do
     0 
   end
 
-  def calculate_pdiff_cap(results, cap) do
+  def calculate_aggregate_pdiff_cap(results, cap) do
     results
     |> Enum.map(&diff/1)
     |> Enum.map(fn(x) -> enforcePositiveCap(x, cap) end)
@@ -25,11 +25,11 @@ defmodule MagiratorCalculator do
   end
 
 
-  def calculate_pdist(results, _) when length(results) == 0 do
+  def calculate_aggregate_pdist(results, _) when length(results) == 0 do
     0 
   end
 
-  def calculate_pdist(results, dist) do
+  def calculate_aggregate_pdist(results, dist) do
     results
     |> Enum.map(&diff/1)
     |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
@@ -37,11 +37,11 @@ defmodule MagiratorCalculator do
   end
 
 
-  def calculate_pdist_positive(results, _) when length(results) == 0 do
+  def calculate_aggregate_pdist_positive(results, _) when length(results) == 0 do
     0 
   end
 
-  def calculate_pdist_positive(results, dist) do
+  def calculate_aggregate_pdist_positive(results, dist) do
     results
     |> Enum.map(&diff/1)
     |> Enum.map(fn(x) -> enforceNegativeCap(x, 0) end)
@@ -50,11 +50,11 @@ defmodule MagiratorCalculator do
   end
 
 
-  def calculate_winrate(results) when length(results) == 0 do
+  def calculate_aggregate_winrate(results) when length(results) == 0 do
     50.0    
   end
 
-  def calculate_winrate(results) do
+  def calculate_aggregate_winrate(results) do
     
     combined_results = Enum.reduce(
       results, 
@@ -69,25 +69,25 @@ defmodule MagiratorCalculator do
     Float.round((combined_results.wins / combined_results.games) * 100, 1)
   end
 
-  def count_games(results) do
+  def count_aggregate_games(results) do
     results
     |> Enum.map(&(&1.games))
     |> Enum.sum()
   end
 
-  def count_wins(results) do
+  def count_aggregate_wins(results) do
     results
     |> Enum.map(&(&1.wins))
     |> Enum.sum()
   end
 
-  def count_losses(results) do
+  def count_aggregate_losses(results) do
     results
     |> Enum.map(&(&1.losses))
     |> Enum.sum()
   end
 
-  def count_draws(results) do
+  def count_aggregate_draws(results) do
     results
     |> Enum.map(&(&1.games - (&1.wins + &1.losses)))
     |> Enum.sum()
@@ -146,5 +146,20 @@ defmodule MagiratorCalculator do
       draws: Enum.count(results, fn x -> x.place == 0 end),      
       losses: Enum.count(results, fn x -> x.place >= 2 end)      
     }
+  end
+
+
+  @doc """
+  Calculates a winrate with wins vs non-wins on a summary
+  """
+  def calculate_summary_winrate(%{wins: 0, draws: 0, losses: 0}) do
+    50.0
+  end
+
+  def calculate_summary_winrate(%{wins: wins, draws: draws, losses: losses}) do
+    wins + draws + losses
+    |> (fn sum -> wins/sum end).()
+    |> (fn winrate -> winrate * 100 end).()
+    |> Float.round(1)
   end
 end
