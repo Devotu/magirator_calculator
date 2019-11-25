@@ -162,4 +162,13 @@ defmodule MagiratorCalculator do
     |> (fn winrate -> winrate * 100 end).()
     |> Float.round(1)
   end
+
+
+  @doc """
+  Calculates the difference between #wins - #losses
+  Draws do not affect the result
+  """
+  def calculate_summary_pdiff(%{wins: wins, losses: losses}) do
+    wins - losses
+  end
 end

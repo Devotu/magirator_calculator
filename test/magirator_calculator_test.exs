@@ -142,4 +142,90 @@ defmodule MagiratorCalculatorTest do
     winrate = MagiratorCalculator.calculate_summary_winrate(summary)
     assert 0.0 = winrate
   end
+
+
+  test "calculate summarized points diff +" do
+    summary = %{wins: 12, draws: 2, losses: 7}
+    points = MagiratorCalculator.calculate_summary_pdiff(summary)
+    assert is_number points
+    assert 5 == points
+  end
+
+  test "calculate summarized points diff -" do
+    summary = %{wins: 2, draws: 2, losses: 7}
+    points = MagiratorCalculator.calculate_summary_pdiff(summary)
+    assert is_number points
+    assert -5 == points
+  end
+
+  test "calculate summarized points diff 0" do
+    summary = %{wins: 7, draws: 2, losses: 7}
+    points = MagiratorCalculator.calculate_summary_pdiff(summary)
+    assert is_number points
+    assert 0 == points
+  end
+
+
+  # test "calculate summarized points diff with cap +" do
+  #   summary = %{wins: 9, draws: 2, losses: 7}
+  #   cap = 3
+  #   points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, cap)
+  #   assert is_number points
+  #   assert !cap < points
+  #   assert 3 == points
+  # end
+
+  # test "calculate summarized points diff with cap capped +" do
+  #   summary = %{wins: 12, draws: 2, losses: 7}
+  #   cap = 3
+  #   points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, cap)
+  #   assert is_number points
+  #   assert !cap < points
+  #   assert 3 == points
+  # end
+
+  # test "calculate summarized points diff with cap -" do
+  #   summary = %{wins: 6, draws: 2, losses: 7}
+  #   cap = 3
+  #   points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, cap)
+  #   assert is_number points
+  #   assert !cap < points
+  #   assert -1 == points
+  # end
+
+  # test "calculate summarized points diff with cap capped -" do
+  #   summary = %{wins: 1, draws: 2, losses: 7}
+  #   cap = 3
+  #   points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, cap)
+  #   assert is_number points
+  #   assert !cap < points
+  #   assert 3 == points
+  # end
+
+  # test "calculate summarized points diff with cap 0" do
+  #   summary = %{wins: 7, draws: 2, losses: 7}
+  #   cap = 3
+  #   points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, cap)
+  #   assert is_number points
+  #   assert !3 > points
+  #   assert 0 == points
+  # end
+
+
+  # test "calculate summarized points dist" do
+  #   summary = %{wins: 12, draws: 2, losses: 7}
+  #   dist = 2
+  #   points = MagiratorCalculator.calculate_summary_pdist(summary, dist)
+  #   assert is_number points
+  #   assert 0 == points
+  # end
+
+  # test "calculate summarized points dist only positive" do
+  #   summary = %{wins: 12, draws: 2, losses: 7}
+  #   dist = 2
+  #   points = MagiratorCalculator.calculate_summary_pdist_positive(summary, dist)
+  #   assert is_number points
+  #   assert 0 == points
+  # end
+
 end
