@@ -24,36 +24,36 @@ defmodule MagiratorCalculator do
   end
 
 
-  def calculate_aggregate_pdist(results, _) when length(results) == 0 do
-    0 
-  end
+  # def calculate_summary_list_pdist(results, _) when length(results) == 0 do
+  #   0 
+  # end
 
-  def calculate_aggregate_pdist(results, dist) do
-    results
-    |> Enum.map(&diff/1)
-    |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
-    |> Enum.sum()
-  end
-
-
-  def calculate_aggregate_pdist_positive(results, _) when length(results) == 0 do
-    0 
-  end
-
-  def calculate_aggregate_pdist_positive(results, dist) do
-    results
-    |> Enum.map(&diff/1)
-    |> Enum.map(fn(x) -> enforceNegativeCap(x, 0) end)
-    |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
-    |> Enum.sum()
-  end
+  # def calculate_summary_list_pdist(results, dist) do
+  #   results
+  #   |> Enum.map(&diff/1)
+  #   |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
+  #   |> Enum.sum()
+  # end
 
 
-  def calculate_aggregate_winrate(results) when length(results) == 0 do
+  # def calculate_summary_list_pdist_positive(results, _) when length(results) == 0 do
+  #   0 
+  # end
+
+  # def calculate_summary_list_pdist_positive(results, dist) do
+  #   results
+  #   |> Enum.map(&diff/1)
+  #   |> Enum.map(fn(x) -> enforceNegativeCap(x, 0) end)
+  #   |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
+  #   |> Enum.sum()
+  # end
+
+
+  def calculate_summary_list_winrate(results) when length(results) == 0 do
     50.0    
   end
 
-  def calculate_aggregate_winrate(results) do
+  def calculate_summary_list_winrate(results) do
     
     combined_results = Enum.reduce(
       results, 
@@ -68,72 +68,58 @@ defmodule MagiratorCalculator do
     Float.round((combined_results.wins / combined_results.games) * 100, 1)
   end
 
-  def count_aggregate_games(results) do
-    results
-    |> Enum.map(&(&1.games))
-    |> Enum.sum()
-  end
+  # def count_summary_list_games(results) do
+  #   results
+  #   |> Enum.map(&(&1.games))
+  #   |> Enum.sum()
+  # end
 
-  def count_aggregate_wins(results) do
-    results
-    |> Enum.map(&(&1.wins))
-    |> Enum.sum()
-  end
+  # def count_summary_list_wins(results) do
+  #   results
+  #   |> Enum.map(&(&1.wins))
+  #   |> Enum.sum()
+  # end
 
-  def count_aggregate_losses(results) do
-    results
-    |> Enum.map(&(&1.losses))
-    |> Enum.sum()
-  end
+  # def count_summary_list_losses(results) do
+  #   results
+  #   |> Enum.map(&(&1.losses))
+  #   |> Enum.sum()
+  # end
 
-  def count_aggregate_draws(results) do
-    results
-    |> Enum.map(&(&1.games - (&1.wins + &1.losses)))
-    |> Enum.sum()
-  end
-
-
-  #Privates
-  defp diff(result) do
-    result.wins - result.losses
-  end
+  # def count_summary_list_draws(results) do
+  #   results
+  #   |> Enum.map(&(&1.games - (&1.wins + &1.losses)))
+  #   |> Enum.sum()
+  # end
 
 
-  defp enforcePositiveCap(value, cap) do
-    case value > cap do
-      :true -> cap
-      _ -> value        
-    end
-  end
-
-  defp enforceNegativeCap(value, cap) do
-    case value < -cap do
-      :true -> -cap
-      _ -> value        
-    end
+  @doc """
+  Summarizes the occasions of places 1, 0 and 2+ as {wins, draws, losses}
+  Requires a summary_list containing maps with a :place value
+  """
+  def summarize_places(results) do
+    %{
+      wins: Enum.count(results, fn x -> x.place == 1 end),   
+      draws: Enum.count(results, fn x -> x.place == 0 end),      
+      losses: Enum.count(results, fn x -> x.place >= 2 end)      
+    }
   end
 
 
-  defp distributeByDistance(value, dist) do
-    case value > 0 do
-      :true -> distributeByPositiveDistance(value, dist)
-      _ -> distributeByNegativeDistance(value, dist)        
-    end
+  @doc """
+  Calculates a winrate with wins vs non-wins on a summary
+  """
+  def calculate_summary_winrate(%{wins: 0, draws: 0, losses: 0}) do
+    50.0
   end
 
-  defp distributeByPositiveDistance(value, dist) do
-    value
-    |> Kernel.+(1)
-    |> Kernel./(dist)
-    |> trunc()
+  def calculate_summary_winrate(%{wins: wins, draws: draws, losses: losses}) do
+    wins + draws + losses
+    |> (fn sum -> wins/sum end).()
+    |> (fn winrate -> winrate * 100 end).()
+    |> Float.round(1)
   end
 
-  defp distributeByNegativeDistance(value, dist) do
-    value
-    |> Kernel.-(1)
-    |> Kernel./(dist)
-    |> trunc()
-  end
 
   @doc """
   Calculates the difference between #wins - #losses
