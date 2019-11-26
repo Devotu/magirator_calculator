@@ -62,37 +62,37 @@ defmodule MagiratorCalculatorTest do
     assert 50.0 = winrate
   end
 
-#  test "count list of summaries games" do
-#     results = [
-#       %{id: 20, games: 5, wins: 4, losses: 1}, 
-#       %{id: 21, games: 6, wins: 3, losses: 2}
-#     ]
-#     assert 11 = MagiratorCalculator.count_summary_list_games(results)
-#   end
+ test "count list of summaries games" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 11 = MagiratorCalculator.count_summary_list_games(results)
+  end
 
-#  test "count list of summaries wins" do
-#     results = [
-#       %{id: 20, games: 5, wins: 4, losses: 1}, 
-#       %{id: 21, games: 6, wins: 3, losses: 2}
-#     ]
-#     assert 7 = MagiratorCalculator.count_summary_list_wins(results)
-#   end
+ test "count list of summaries wins" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 7 = MagiratorCalculator.count_summary_list_wins(results)
+  end
 
-#  test "count list of summaries draws" do
-#     results = [
-#       %{id: 20, games: 5, wins: 4, losses: 1}, 
-#       %{id: 21, games: 6, wins: 3, losses: 2}
-#     ]
-#     assert 1 = MagiratorCalculator.count_summary_list_draws(results)
-#   end
+ test "count list of summaries draws" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 1 = MagiratorCalculator.count_summary_list_draws(results)
+  end
 
-#  test "count list of summaries losses" do
-#     results = [
-#       %{id: 20, games: 5, wins: 4, losses: 1}, 
-#       %{id: 21, games: 6, wins: 3, losses: 2}
-#     ]
-#     assert 3 = MagiratorCalculator.count_summary_list_losses(results)
-#   end
+ test "count list of summaries losses" do
+    results = [
+      %{id: 20, games: 5, wins: 4, losses: 1}, 
+      %{id: 21, games: 6, wins: 3, losses: 2}
+    ]
+    assert 3 = MagiratorCalculator.count_summary_list_losses(results)
+  end
 
 
   test "count placings" do
