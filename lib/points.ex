@@ -27,7 +27,7 @@ defmodule MagiratorCalculator.Points do
   end
 
 
-  defp distributeByDistance(value, dist) do
+  def distributeByDistance(value, dist) do
     case value > 0 do
       :true -> distributeByPositiveDistance(value, dist)
       _ -> distributeByNegativeDistance(value, dist)        

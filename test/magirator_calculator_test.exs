@@ -23,17 +23,17 @@ defmodule MagiratorCalculatorTest do
     assert points == 3-1-3
   end
 
-#   test "calculate list of summaries points with dist 2" do
-#     results = [
-#       %{id: 20, games: 10, wins: 8, losses: 2},
-#       %{id: 21, games: 5, wins: 2, losses: 3},
-#       %{id: 22, games: 15, wins: 5, losses: 10}, 
-#       %{id: 23, games: 8, wins: 5, losses: 2}, 
-#     ]
-#     points = MagiratorCalculator.calculate_summary_list_pdist(results, 2)
-#     assert is_number points
-#     assert points == 3-1-3+2
-#   end
+  test "calculate list of summaries points with dist 2" do
+    results = [
+      %{id: 20, games: 10, wins: 8, losses: 2},
+      %{id: 21, games: 5, wins: 2, losses: 3},
+      %{id: 22, games: 15, wins: 5, losses: 10}, 
+      %{id: 23, games: 8, wins: 5, losses: 2}, 
+    ]
+    points = MagiratorCalculator.calculate_summary_list_pdist(results, 2)
+    assert is_number points
+    assert points == 3-1-3+2
+  end
 
 #   test "calculate list of summaries positive points with dist 2" do
 #     results = [
@@ -199,13 +199,29 @@ defmodule MagiratorCalculatorTest do
   end
 
 
-  # test "calculate summarized points dist" do
-  #   summary = %{wins: 12, draws: 2, losses: 7}
-  #   dist = 2
-  #   points = MagiratorCalculator.calculate_summary_pdist(summary, dist)
-  #   assert is_number points
-  #   assert 0 == points
-  # end
+  test "calculate summarized points dist 2" do
+    summary = %{wins: 12, draws: 2, losses: 7}
+    dist = 2
+    points = MagiratorCalculator.calculate_summary_pdist(summary, dist)
+    assert is_number points
+    assert 3 == points
+  end
+
+  test "calculate summarized points dist 3" do
+    summary = %{wins: 12, draws: 2, losses: 7}
+    dist = 3
+    points = MagiratorCalculator.calculate_summary_pdist(summary, dist)
+    assert is_number points
+    assert 2 == points
+  end
+
+  test "calculate summarized points dist 2 -" do
+    summary = %{wins: 7, draws: 1, losses: 12}
+    dist = 2
+    points = MagiratorCalculator.calculate_summary_pdist(summary, dist)
+    assert is_number points
+    assert -3 == points
+  end
 
   # test "calculate summarized points dist only positive" do
   #   summary = %{wins: 12, draws: 2, losses: 7}

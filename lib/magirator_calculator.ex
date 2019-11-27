@@ -24,17 +24,16 @@ defmodule MagiratorCalculator do
   end
 
 
-  # def calculate_summary_list_pdist(results, _) when length(results) == 0 do
-  #   0 
-  # end
+  def calculate_summary_list_pdist(results, _) when length(results) == 0 do
+    0 
+  end
 
-  # def calculate_summary_list_pdist(results, dist) do
-  #   results
-  #   |> Enum.map(&diff/1)
-  #   |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
-  #   |> Enum.sum()
-  # end
-
+  def calculate_summary_list_pdist(results, dist) do
+    results
+    |> Enum.map(fn(x) -> P.diff(x) end)
+    |> Enum.map(fn(x) -> P.distributeByDistance(x, dist) end)
+    |> Enum.sum()
+  end
 
   # def calculate_summary_list_pdist_positive(results, _) when length(results) == 0 do
   #   0 
@@ -145,5 +144,15 @@ defmodule MagiratorCalculator do
   """
   def calculate_summary_pdiff_cap(%{wins: _wins, losses: _losses} = result, cap) do
     P.diff_cap(result, cap)
+  end
+
+
+  @doc """
+  Distributes points every x diff
+  Draws do not affect the result
+  """
+  def calculate_summary_pdist(%{wins: _wins, losses: _losses} = result, dist) do
+    P.diff(result)
+    |> P.distributeByDistance(dist)
   end
 end
