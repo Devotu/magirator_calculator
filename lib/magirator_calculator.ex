@@ -35,17 +35,17 @@ defmodule MagiratorCalculator do
     |> Enum.sum()
   end
 
-  # def calculate_summary_list_pdist_positive(results, _) when length(results) == 0 do
-  #   0 
-  # end
 
-  # def calculate_summary_list_pdist_positive(results, dist) do
-  #   results
-  #   |> Enum.map(&diff/1)
-  #   |> Enum.map(fn(x) -> enforceNegativeCap(x, 0) end)
-  #   |> Enum.map(fn(x) -> distributeByDistance(x, dist) end)
-  #   |> Enum.sum()
-  # end
+  def calculate_summary_list_pdist_positive(results, _) when length(results) == 0 do
+    0 
+  end
+
+  def calculate_summary_list_pdist_positive(results, dist) do
+    results
+    |> Enum.map(fn(x) -> P.diff(x) end)
+    |> Enum.map(fn(x) -> P.distributeByPositiveDistance(x, dist) end)
+    |> Enum.sum()
+  end
 
 
   def calculate_summary_list_winrate(results) when length(results) == 0 do
@@ -148,11 +148,21 @@ defmodule MagiratorCalculator do
 
 
   @doc """
-  Distributes points every x diff
+  Distributes points every diff x
   Draws do not affect the result
   """
   def calculate_summary_pdist(%{wins: _wins, losses: _losses} = result, dist) do
     P.diff(result)
     |> P.distributeByDistance(dist)
+  end
+
+
+  @doc """
+  Distributes points every positive diff x 
+  Draws do not affect the result
+  """
+  def calculate_summary_pdist_positive(%{wins: _wins, losses: _losses} = result, dist) do
+    P.diff(result)
+    |> P.distributeByPositiveDistance(dist)
   end
 end

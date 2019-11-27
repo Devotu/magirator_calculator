@@ -34,14 +34,15 @@ defmodule MagiratorCalculator.Points do
     end
   end
 
-  defp distributeByPositiveDistance(value, dist) do
+  def distributeByPositiveDistance(value, dist) do
     value
+    |> enforceNegativeCap(0)
     |> Kernel.+(1)
     |> Kernel./(dist)
     |> trunc()
   end
 
-  defp distributeByNegativeDistance(value, dist) do
+  def distributeByNegativeDistance(value, dist) do
     value
     |> Kernel.-(1)
     |> Kernel./(dist)
