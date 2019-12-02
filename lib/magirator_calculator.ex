@@ -106,6 +106,18 @@ defmodule MagiratorCalculator do
 
 
   @doc """
+  Summarizes the occasions of places 1, 0 and 2+ as {wins, draws, losses}
+  Grouped by opposing deck
+  Requires a summary_list containing maps with a :place value
+  """
+  def summarize_places_by_opponent_deck(results) do
+    results
+    |> Enum.group_by(fn(x)-> x.opponent_deck_id end)
+    |> Enum.map(fn({k,v})-> Map.merge(summarize_places(v), %{opponent_deck_id: k}) end)
+  end
+
+
+  @doc """
   Calculates a winrate with wins vs non-wins on a summary
   """
   def calculate_summary_winrate(%{wins: 0, draws: 0, losses: 0}) do

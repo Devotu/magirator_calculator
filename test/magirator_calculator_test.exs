@@ -99,19 +99,50 @@ defmodule MagiratorCalculatorTest do
 
   test "count placings" do
     results = [
-      %{place: 1},
-      %{place: 2},
-      %{place: 1, game_id: 40},
-      %{place: 2, other: %{things: "stuff"}},
-      %{place: 0},
-      %{place: 2},
-      %{place: 3},
+      %{place: 1, opponent_deck_id: 1},
+      %{place: 2, opponent_deck_id: 1},
+      %{place: 3, opponent_deck_id: 2},
+      %{place: 1, opponent_deck_id: 2},
+      %{place: 1, opponent_deck_id: 2},
+      %{place: 2, opponent_deck_id: 2},
+      %{place: 0, opponent_deck_id: 3},
     ]
     
     %{wins: wins, draws: draws, losses: losses} = MagiratorCalculator.summarize_places(results)
-    assert wins == 2
+    assert wins == 3
     assert draws == 1
-    assert losses == 4
+    assert losses == 3
+  end
+
+
+  test "count placings order by opponent deck" do
+    results = [
+      %{place: 1, opponent_deck_id: 1},
+      %{place: 2, opponent_deck_id: 1},
+      %{place: 3, opponent_deck_id: 2},
+      %{place: 1, opponent_deck_id: 2},
+      %{place: 1, opponent_deck_id: 2},
+      %{place: 2, opponent_deck_id: 2},
+      %{place: 0, opponent_deck_id: 3},
+    ]
+    
+    result_list = MagiratorCalculator.summarize_places_by_opponent_deck(results)
+    assert is_list result_list
+    
+    r1 = Enum.find(result_list, fn(x)-> x.opponent_deck_id == 1 end)
+    assert r1.wins == 1
+    assert r1.draws == 0
+    assert r1.losses == 1
+
+    r2 = Enum.find(result_list, fn(x)-> x.opponent_deck_id == 2 end)
+    assert r2.wins == 2
+    assert r2.draws == 0
+    assert r2.losses == 2
+
+    r3 = Enum.find(result_list, fn(x)-> x.opponent_deck_id == 3 end)
+    assert r3.wins == 0
+    assert r3.draws == 1
+    assert r3.losses == 0
   end
 
 
