@@ -1,5 +1,6 @@
 defmodule MagiratorCalculator do
   alias MagiratorCalculator.Points, as: P
+  alias MagiratorCalculator.Tier, as: T
 
   #Exposed
   def calculate_summary_list_pdiff(results) when length(results) == 0 do
@@ -177,4 +178,14 @@ defmodule MagiratorCalculator do
     P.diff(result)
     |> P.distributeByPositiveDistance(dist)
   end
+
+
+  def trace_tier(results) do
+    T.init_record(results) #%{"1": 0, "2": 0 ...}
+    |> T.validate()
+    |> T.assign_deltas()
+    |> T.shift_tiers()
+    |> T.package_output()
+  end
+
 end

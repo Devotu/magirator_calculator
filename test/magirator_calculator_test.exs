@@ -310,4 +310,61 @@ defmodule MagiratorCalculatorTest do
     assert 0 == points
   end
 
+
+  # @tag tier: true
+  # test "trace tier" do
+  #   results = [
+  #     %{deck_id: 1, place: 1, opponent_deck_id: 2},
+  #     %{deck_id: 2, place: 2, opponent_deck_id: 1},
+  #     %{deck_id: 1, place: 1, opponent_deck_id: 2},
+  #     %{deck_id: 2, place: 2, opponent_deck_id: 1},
+
+  #     %{deck_id: 1, place: 1, opponent_deck_id: 3},
+  #     %{deck_id: 3, place: 2, opponent_deck_id: 1},
+  #     %{deck_id: 1, place: 0, opponent_deck_id: 3},
+  #     %{deck_id: 3, place: 2, opponent_deck_id: 1},
+
+  #     %{deck_id: 1, place: 2, opponent_deck_id: 2},
+  #     %{deck_id: 2, place: 1, opponent_deck_id: 1},
+  #     %{deck_id: 1, place: 1, opponent_deck_id: 2},
+  #     %{deck_id: 2, place: 2, opponent_deck_id: 1},
+  #     %{deck_id: 1, place: 2, opponent_deck_id: 2},
+  #     %{deck_id: 2, place: 1, opponent_deck_id: 1},
+  #   ]
+    
+  #   assert %{"1": 1, "2": 0, "3": -1} = MagiratorCalculator.trace_tier(results)
+  # end
+
+  @tag tier: true
+  test "trace tier" do
+    results = [
+      %{deck_id_one: 1, place_one: 1, deck_id_two: 2, place_two: 2}, # +1  0: -1  0:  0  0:  0  0:  0  0
+      %{deck_id_one: 1, place_one: 1, deck_id_two: 2, place_two: 2}, # +2 >1: -2>-1:  0  0:  0  0:  0  0
+
+      %{deck_id_one: 3, place_one: 1, deck_id_two: 4, place_two: 2}, #  0  1:  0 -1: +1  0: -1  0:  0  0
+      %{deck_id_one: 3, place_one: 1, deck_id_two: 4, place_two: 2}, #  0  1:  0 -1: +2 >1: -2>-1:  0  0
+
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 4, place_two: 2}, #  0  1: +1 -1:  0  1: -1 -1:  0  0
+      # %{deck_id_one: 2, place_one: 2, deck_id_two: 4, place_two: 1}, #  0  1:  0 -1:  0  1:  0 -1:  0  0
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 4, place_two: 2}, #  0  1: +1 -1:  0  1: -1 -1:  0  0
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 4, place_two: 2}, #  0  1: +2 >0:  0  1: -2>-2:  0  0
+
+      # %{deck_id_one: 1, place_one: 1, deck_id_two: 3, place_two: 2}, # +1  1:  0  0: -1  1:  0 -2:  0  0
+      # %{deck_id_one: 1, place_one: 2, deck_id_two: 3, place_two: 1}, #  0  1:  0  0:  0  1:  0 -2:  0  0
+      # %{deck_id_one: 1, place_one: 1, deck_id_two: 3, place_two: 2}, # +1  1:  0  0: -1  1:  0 -2:  0  0
+      # %{deck_id_one: 1, place_one: 1, deck_id_two: 3, place_two: 2}, # +2 >2:  0  0: -2 >0:  0 -2:  0  0
+
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 3, place_two: 2}, #  0  2: +1  0: -1  0:  0 -2:  0  0
+
+      # %{deck_id_one: 3, place_one: 1, deck_id_two: 5, place_two: 2}, #  0  2: +1  0:  0  0:  0 -2: -1  0
+
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 5, place_two: 2}, #  0  2: +2 >1:  0  0:  0 -2: -2>-1
+
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 5, place_two: 2}, #  0  2:  0  1:  0  0:  0 -2:  0 -1
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 5, place_two: 2}, #  0  2:  0  1:  0  0:  0 -2:  0 -1
+      # %{deck_id_one: 2, place_one: 1, deck_id_two: 5, place_two: 2}, #  0  2:  0  1:  0  0:  0 -2:  0 -1
+    ]
+    
+    assert %{"1": 2, "2": 1, "3": 0, "4": -2, "5": -1} = MagiratorCalculator.trace_tier(results)
+  end
 end
