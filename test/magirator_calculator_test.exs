@@ -2,6 +2,7 @@ defmodule MagiratorCalculatorTest do
   use ExUnit.Case
   doctest MagiratorCalculator
 
+  @tag points: true
   test "calculate list of summaries points" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2}, 
@@ -12,6 +13,7 @@ defmodule MagiratorCalculatorTest do
     assert points == 6-1
   end
 
+  @tag points: true
   test "calculate list of summaries points with cap 3" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2}, 
@@ -23,6 +25,7 @@ defmodule MagiratorCalculatorTest do
     assert points == 3-1-3
   end
 
+  @tag points: true
   test "calculate list of summaries points with dist 2" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2},
@@ -36,6 +39,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag points: true
   test "calculate list of summaries positive points with dist 2" do
     results = [
       %{id: 20, games: 10, wins: 8, losses: 2}, 
@@ -49,6 +53,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag winrate: true
   test "calculate list of summaries winrate" do
     results = [
       %{id: 20, games: 5, wins: 4, losses: 1}, 
@@ -58,6 +63,7 @@ defmodule MagiratorCalculatorTest do
     assert 63.6 = winrate
   end
 
+  @tag winrate: true
   test "calculate list of summaries winrate no games" do
     results = []
     winrate = MagiratorCalculator.calculate_summary_list_winrate(results)
@@ -97,6 +103,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag count: true
   test "count placings" do
     results = [
       %{place: 1, opponent_deck_id: 1},
@@ -115,6 +122,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag count: true
   test "count placings order by opponent deck" do
     results = [
       %{place: 1, opponent_deck_id: 1},
@@ -146,30 +154,35 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag winrate: true
   test "calculate summarized winrate" do
     summary = %{wins: 12, draws: 2, losses: 7}
     winrate = MagiratorCalculator.calculate_summary_winrate(summary)
     assert 57.1 = winrate
   end
 
+  @tag winrate: true
   test "calculate summarized winrate no games" do
     summary = %{wins: 0, draws: 0, losses: 0}
     winrate = MagiratorCalculator.calculate_summary_winrate(summary)
     assert 50.0 = winrate
   end
 
+  @tag winrate: true
   test "calculate summarized winrate no wins" do
     summary = %{wins: 0, draws: 0, losses: 10}
     winrate = MagiratorCalculator.calculate_summary_winrate(summary)
     assert 0.0 = winrate
   end
 
+  @tag winrate: true
   test "calculate summarized winrate no losses" do
     summary = %{wins: 10, draws: 0, losses: 0}
     winrate = MagiratorCalculator.calculate_summary_winrate(summary)
     assert 100.0 = winrate
   end
 
+  @tag winrate: true
   test "calculate summarized winrate only draws" do
     summary = %{wins: 0, draws: 10, losses: 0}
     winrate = MagiratorCalculator.calculate_summary_winrate(summary)
@@ -177,6 +190,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag points: true
   test "calculate summarized points diff +" do
     summary = %{wins: 12, draws: 2, losses: 7}
     points = MagiratorCalculator.calculate_summary_pdiff(summary)
@@ -184,6 +198,7 @@ defmodule MagiratorCalculatorTest do
     assert 5 == points
   end
 
+  @tag points: true
   test "calculate summarized points diff -" do
     summary = %{wins: 2, draws: 2, losses: 7}
     points = MagiratorCalculator.calculate_summary_pdiff(summary)
@@ -191,6 +206,7 @@ defmodule MagiratorCalculatorTest do
     assert -5 == points
   end
 
+  @tag points: true
   test "calculate summarized points diff 0" do
     summary = %{wins: 7, draws: 2, losses: 7}
     points = MagiratorCalculator.calculate_summary_pdiff(summary)
@@ -199,12 +215,14 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag points: true
   test "calculate summarized points diff with cap 3 +" do
     summary = %{wins: 9, draws: 2, losses: 7}
     points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, 3)
     assert 2 == points
   end
 
+  @tag points: true
   test "calculate summarized points diff with cap 3 capped +" do
     summary = %{wins: 12, draws: 2, losses: 7}
     cap = 3
@@ -212,12 +230,14 @@ defmodule MagiratorCalculatorTest do
     assert cap == points
   end
 
+  @tag points: true
   test "calculate summarized points diff with cap 3 -" do
     summary = %{wins: 6, draws: 2, losses: 7}
     points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, 3)
     assert -1 == points
   end
 
+  @tag points: true
   test "calculate summarized points diff with cap 3 capped -" do
     summary = %{wins: 1, draws: 2, losses: 7}
     cap = 3
@@ -225,6 +245,7 @@ defmodule MagiratorCalculatorTest do
     assert -cap == points
   end
 
+  @tag points: true
   test "calculate summarized points diff with cap 3 0" do
     summary = %{wins: 7, draws: 2, losses: 7}
     points = MagiratorCalculator.calculate_summary_pdiff_cap(summary, 3)
@@ -232,6 +253,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag points: true
   test "calculate summarized points dist 2" do
     summary = %{wins: 12, draws: 2, losses: 7}
     dist = 2
@@ -239,6 +261,7 @@ defmodule MagiratorCalculatorTest do
     assert 3 == points
   end
 
+  @tag points: true
   test "calculate summarized points dist 3" do
     summary = %{wins: 12, draws: 2, losses: 7}
     dist = 3
@@ -246,6 +269,7 @@ defmodule MagiratorCalculatorTest do
     assert 2 == points
   end
 
+  @tag points: true
   test "calculate summarized points dist 2 -" do
     summary = %{wins: 7, draws: 1, losses: 12}
     dist = 2
@@ -253,6 +277,7 @@ defmodule MagiratorCalculatorTest do
     assert -3 == points
   end
 
+  @tag points: true
   test "calculate summarized points dist 2 0" do
     summary = %{wins: 0, draws: 1, losses: 0}
     dist = 2
@@ -261,6 +286,7 @@ defmodule MagiratorCalculatorTest do
   end
 
 
+  @tag points: true
   test "calculate summarized points dist only positive" do
     summary = %{wins: 12, draws: 2, losses: 7}
     dist = 2
@@ -268,6 +294,7 @@ defmodule MagiratorCalculatorTest do
     assert 3 == points
   end
 
+  @tag points: true
   test "calculate summarized points dist only positive -" do
     summary = %{wins: 2, draws: 2, losses: 7}
     dist = 2
@@ -275,6 +302,7 @@ defmodule MagiratorCalculatorTest do
     assert 0 == points
   end
 
+  @tag points: true
   test "calculate summarized points dist only positive 0" do
     summary = %{wins: 0, draws: 2, losses: 0}
     dist = 2
