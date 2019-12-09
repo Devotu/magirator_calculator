@@ -22,13 +22,21 @@ defmodule MagiratorCalculator.Tier do
   end
 
 
-  def assign_deltas(record) do
+  def assign_deltas({%{deck_id_one: d1, deck_id_two: d2} = result, record}) do
+    record = 
     record
+    |> Map.put(d1, Map.put(record[d1], :delta, record[d1].delta + delta_one(result)))
+    |> Map.put(d2, Map.put(record[d2], :delta, record[d2].delta + delta_two(result)))
+    {result, record}
   end
 
+  defp delta_one(%{place_one: place}) when place == 1, do: 1
+  defp delta_one(%{place_one: place}) when place > 1, do: -1
+  defp delta_one(%{place_one: _place}), do: 0
 
-  def shift_tiers(record) do
-    record
+  defp delta_two(%{place_two: place}) when place == 1, do: 1
+  defp delta_two(%{place_two: place}) when place > 1, do: -1
+  defp delta_two(%{place_two: _place}), do: 0
   end
 
 
