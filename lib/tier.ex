@@ -13,8 +13,12 @@ defmodule MagiratorCalculator.Tier do
     {:ok, record}
   end
 
-  def validate(record) do
-    record
+
+  def validate({%{deck_id_one: d1, deck_id_two: d2} = result, record}) do
+    case record[d1].tier == record[d2].tier do
+      :true -> {result, record}
+      _     -> {:invalid, :tier_mismatch}        
+    end
   end
 
 
