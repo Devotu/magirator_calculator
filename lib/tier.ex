@@ -5,10 +5,12 @@ defmodule MagiratorCalculator.Tier do
   %{"n": {delta, tier}}
   """
   def init_record(results) when is_list results do
-    results
+    record = results
     |> Enum.reduce([], fn(x, l)-> l ++ [x.deck_id_one, x.deck_id_two] end)
     |> Enum.uniq()
-    |> Enum.reduce(%{}, fn(x, m)-> Map.put(m, x, {0,0}) end)
+    |> Enum.reduce(%{}, fn(x, m)-> Map.put(m, x, %{delta: 0, tier: 0}) end)
+
+    {:ok, record}
   end
 
   def validate(record) do
