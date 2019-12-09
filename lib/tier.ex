@@ -34,13 +34,37 @@ defmodule MagiratorCalculator.Tier do
   defp delta_one(%{place_one: place}) when place > 1, do: -1
   defp delta_one(%{place_one: _place}), do: 0
 
-  defp delta_two(%{place_two: place}) when place == 1, do: 1
-  defp delta_two(%{place_two: place}) when place > 1, do: -1
-  defp delta_two(%{place_two: _place}), do: 0
+  defp delta_two(%{place_two: p}) when p == 1, do: 1
+  defp delta_two(%{place_two: p}) when p > 1, do: -1
+  defp delta_two(%{place_two: _p}), do: 0
+
+
+  def shift_tiers({%{deck_id_one: d1, deck_id_two: d2} = result, record}) do
+    record = 
+    record
+    |> Map.put(d1, shift_tier(record[d1]))
+    |> Map.put(d2, shift_tier(record[d2]))
+
+    {result, record}
+  end
+
+  defp shift_tier(%{delta: d, tier: t} = dx) do
+    case d do
+      2 -> 
+        dx
+        |> Map.put(:delta, 0)
+        |> Map.put(:tier, (t+1))
+      -2 -> 
+        dx
+        |> Map.put(:delta, 0)
+        |> Map.put(:tier, (t-1))
+      _ -> 
+        dx
+    end
   end
 
 
-  def package_output(record) do
+  def record_output({_result, record}) do
     record
   end
 end
