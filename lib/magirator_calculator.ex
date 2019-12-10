@@ -181,11 +181,15 @@ defmodule MagiratorCalculator do
 
 
   def trace_tier(results) do
-    T.init_record(results) #%{"1": 0, "2": 0 ...}
+    Enum.reduce(results, T.init_record(results), fn r, acc -> resolve_tier_change(r, acc) end)
+  end
+
+  def resolve_tier_change(result, record) do
+    {result, record}
     |> T.validate()
     |> T.assign_deltas()
     |> T.shift_tiers()
-    |> T.package_output()
+    |> T.record_output()
   end
 
 end

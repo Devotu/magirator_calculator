@@ -10,15 +10,20 @@ defmodule MagiratorCalculator.Tier do
     |> Enum.uniq()
     |> Enum.reduce(%{}, fn(x, m)-> Map.put(m, x, %{delta: 0, tier: 0}) end)
 
-    {:ok, record}
+    record
   end
 
 
   def validate({%{deck_id_first: d1, deck_id_second: d2} = result, record}) do
     case record[d1].tier == record[d2].tier do
       :true -> {result, record}
-      _     -> {:invalid, :tier_mismatch}        
+      _     -> {tier_mismatch(result, record), record}
     end
+  end
+
+  defp tier_mismatch(result, record) do
+    IO.puts(":tier_mismatch - #{Kernel.inspect(result)} - #{Kernel.inspect(record)}")
+    {:invalid, :tier_mismatch}
   end
 
 
@@ -27,6 +32,10 @@ defmodule MagiratorCalculator.Tier do
     record
     |> Map.put(d1, Map.put(record[d1], :delta, record[d1].delta + delta_first(result)))
     |> Map.put(d2, Map.put(record[d2], :delta, record[d2].delta + delta_second(result)))
+    {result, record}
+  end
+
+  def assign_deltas({{:invalid, :tier_mismatch} = result, record}) do
     {result, record}
   end
 
@@ -45,6 +54,10 @@ defmodule MagiratorCalculator.Tier do
     |> Map.put(d1, shift_tier(record[d1]))
     |> Map.put(d2, shift_tier(record[d2]))
 
+    {result, record}
+  end
+
+  def shift_tiers({{:invalid, :tier_mismatch} = result, record}) do
     {result, record}
   end
 

@@ -12,7 +12,7 @@ defmodule TierTest do
       %{deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2}, #  0  1:  0 -1: +2 >1: -2>-1:
     ]
 
-    assert {:ok, %{1 => %{delta: 0, tier: 0}, 2 => %{delta: 0, tier: 0}, 3 => %{delta: 0, tier: 0}, 4 => %{delta: 0, tier: 0}}} == Tier.init_record(results)
+    assert %{1 => %{delta: 0, tier: 0}, 2 => %{delta: 0, tier: 0}, 3 => %{delta: 0, tier: 0}, 4 => %{delta: 0, tier: 0}} == Tier.init_record(results)
   end
 
 
@@ -29,7 +29,7 @@ defmodule TierTest do
     result = %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:
     record = %{1 => %{delta: 0, tier: 1}, 2 => %{delta: 0, tier: 0}}
 
-    assert {:invalid, :tier_mismatch} == Tier.validate({result, record})
+    assert {{:invalid, :tier_mismatch}, record} == Tier.validate({result, record})
   end
 
 
@@ -72,5 +72,14 @@ defmodule TierTest do
     record = %{1 => %{delta: 2, tier: -1}, 2 => %{delta: 1, tier: -1}}
 
     assert {result, %{1 => %{delta: 0, tier: 0}, 2 => %{delta: 1, tier: -1}}} == Tier.shift_tiers({result, record})
+  end
+
+
+  @tag output: true
+  test "only record output" do
+    result = %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:
+    record = %{1 => %{delta: 2, tier: -1}, 2 => %{delta: 1, tier: -1}}
+
+    assert record == Tier.record_output({result, record})
   end
 end
