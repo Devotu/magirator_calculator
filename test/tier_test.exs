@@ -57,6 +57,22 @@ defmodule TierTest do
     assert {result, %{1 => %{delta: 0, tier: 1}, 2 => %{delta: -2, tier: 1}}} == Tier.assign_deltas({result, record})
   end
 
+  @tag shift: true
+  test "assign - +max - (1/2)=>(1/2)" do
+    result = %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:
+    record = %{1 => %{delta: 1, tier: 2}, 2 => %{delta: 1, tier: 2}}
+
+    assert {result, %{1 => %{delta: 1, tier: 2}, 2 => %{delta: 0, tier: 2}}} == Tier.assign_deltas({result, record})
+  end
+
+  @tag shift: true
+  test "assign - -max - (-1/-2)=>(-1/-2)" do
+    result = %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:
+    record = %{1 => %{delta: 0, tier: -2}, 2 => %{delta: -1, tier: -2}}
+
+    assert {result, %{1 => %{delta: 1, tier: -2}, 2 => %{delta: -1, tier: -2}}} == Tier.assign_deltas({result, record})
+  end
+
 
   @tag shift: true
   test "shift - one each - 0/0 -> 1/-1" do
