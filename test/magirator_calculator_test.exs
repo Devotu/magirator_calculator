@@ -311,72 +311,65 @@ defmodule MagiratorCalculatorTest do
   end
 
 
-  # @tag tier: true
-  # test "trace tier" do
-  #   results = [
-  #     %{deck_id: 1, place: 1, opponent_deck_id: 2},
-  #     %{deck_id: 2, place: 2, opponent_deck_id: 1},
-  #     %{deck_id: 1, place: 1, opponent_deck_id: 2},
-  #     %{deck_id: 2, place: 2, opponent_deck_id: 1},
-
-  #     %{deck_id: 1, place: 1, opponent_deck_id: 3},
-  #     %{deck_id: 3, place: 2, opponent_deck_id: 1},
-  #     %{deck_id: 1, place: 0, opponent_deck_id: 3},
-  #     %{deck_id: 3, place: 2, opponent_deck_id: 1},
-
-  #     %{deck_id: 1, place: 2, opponent_deck_id: 2},
-  #     %{deck_id: 2, place: 1, opponent_deck_id: 1},
-  #     %{deck_id: 1, place: 1, opponent_deck_id: 2},
-  #     %{deck_id: 2, place: 2, opponent_deck_id: 1},
-  #     %{deck_id: 1, place: 2, opponent_deck_id: 2},
-  #     %{deck_id: 2, place: 1, opponent_deck_id: 1},
-  #   ]
-    
-  #   assert %{"1": 1, "2": 0, "3": -1} = MagiratorCalculator.trace_tier(results)
-  # end
-
   @tag tier: true
   test "trace tier" do
-    results = [                                                                #  0  0:  0  0:  0  0:  0  0:  0  0
-      %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2}, # +1  0: -1  0:  0  0:  0  0:  0  0
-      %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2}, # +2 >1: -2>-1:  0  0:  0  0:  0  0
+    results = [                                                 
+      #Normal behaviour                                                         #  0  0:  0  0:  0  0:  0  0:  0  0:  0  0
+      %{game_id: 1, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2},  # +1  0: -1  0:  0  0:  0  0:  0  0:  0  0
+      %{game_id: 2, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2},  # +2 >1: -2>-1:  0  0:  0  0:  0  0:  0  0
+      %{game_id: 3, deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  1:  0 -1: +1  0: -1  0:  0  0:  0  0
+      %{game_id: 4, deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  1:  0 -1: +2 >1: -2>-1:  0  0:  0  0
 
-      %{deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2}, #  0  1:  0 -1: +1  0: -1  0:  0  0
-      %{deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2}, #  0  1:  0 -1: +2 >1: -2>-1:  0  0
+      #Back and forth / further than -1
+      %{game_id: 5, deck_id_first: 2, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  1: +1 -1:  0  1: -1 -1:  0  0:  0  0
+      %{game_id: 6, deck_id_first: 2, place_first: 2, deck_id_second: 4, place_second: 1},  #  0  1:  0 -1:  0  1:  0 -1:  0  0:  0  0
+      %{game_id: 7, deck_id_first: 2, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  1: +1 -1:  0  1: -1 -1:  0  0:  0  0
+      %{game_id: 8, deck_id_first: 2, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  1: +2 >0:  0  1: -2>-2:  0  0:  0  0
 
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 4, place_second: 2}, #  0  1: +1 -1:  0  1: -1 -1:  0  0
-      %{deck_id_first: 2, place_first: 2, deck_id_second: 4, place_second: 1}, #  0  1:  0 -1:  0  1:  0 -1:  0  0
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 4, place_second: 2}, #  0  1: +1 -1:  0  1: -1 -1:  0  0
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 4, place_second: 2}, #  0  1: +2 >0:  0  1: -2>-2:  0  0
+      #Back and forth / further than 1
+      %{game_id: 9, deck_id_first: 1, place_first: 1, deck_id_second: 3, place_second: 2},  # +1  1:  0  0: -1  1:  0 -2:  0  0:  0  0
+      %{game_id: 10, deck_id_first: 1, place_first: 2, deck_id_second: 3, place_second: 1},  #  0  1:  0  0:  0  1:  0 -2:  0  0:  0  0
+      %{game_id: 11, deck_id_first: 1, place_first: 1, deck_id_second: 3, place_second: 2},  # +1  1:  0  0: -1  1:  0 -2:  0  0:  0  0
+      %{game_id: 12, deck_id_first: 1, place_first: 1, deck_id_second: 3, place_second: 2},  # +2 >2:  0  0: -2 >0:  0 -2:  0  0:  0  0
 
-      %{deck_id_first: 1, place_first: 1, deck_id_second: 3, place_second: 2}, # +1  1:  0  0: -1  1:  0 -2:  0  0
-      %{deck_id_first: 1, place_first: 2, deck_id_second: 3, place_second: 1}, #  0  1:  0  0:  0  1:  0 -2:  0  0
-      %{deck_id_first: 1, place_first: 1, deck_id_second: 3, place_second: 2}, # +1  1:  0  0: -1  1:  0 -2:  0  0
-      %{deck_id_first: 1, place_first: 1, deck_id_second: 3, place_second: 2}, # +2 >2:  0  0: -2 >0:  0 -2:  0  0
+      #Not mutually dependent
+      %{game_id: 13, deck_id_first: 2, place_first: 1, deck_id_second: 3, place_second: 2},  #  0  2: +1  0: -1  0:  0 -2:  0  0:  0  0
+      %{game_id: 14, deck_id_first: 3, place_first: 1, deck_id_second: 5, place_second: 2},  #  0  2: +1  0:  0  0:  0 -2: -1  0:  0  0
+      %{game_id: 15, deck_id_first: 2, place_first: 1, deck_id_second: 5, place_second: 2},  #  0  2: +2 >1:  0  0:  0 -2: -2>-1:  0  0
 
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 3, place_second: 2}, #  0  2: +1  0: -1  0:  0 -2:  0  0
+      #Only valid matchups
+      %{game_id: 16, deck_id_first: 2, place_first: 1, deck_id_second: 5, place_second: 2},  #  0  2:  0  1:  0  0:  0 -2:  0 -1:  0  0
+      %{game_id: 17, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2},  #  0  2:  0  1:  0  0:  0 -2:  0 -1:  0  0
+      %{game_id: 18, deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  2:  0  1:  0  0:  0 -2:  0 -1:  0  0
 
-      %{deck_id_first: 3, place_first: 1, deck_id_second: 5, place_second: 2}, #  0  2: +1  0:  0  0:  0 -2: -1  0
+      #Ending at odds
+      %{game_id: 19, deck_id_first: 3, place_first: 1, deck_id_second: 6, place_second: 2},  #  0  2:  0  1:  1  0:  0 -2:  0 -1: -1  0
+      %{game_id: 20, deck_id_first: 3, place_first: 1, deck_id_second: 6, place_second: 2},  #  0  2:  0  1:  2 >1:  0 -2:  0 -1: -2>-1
+      %{game_id: 21, deck_id_first: 3, place_first: 1, deck_id_second: 2, place_second: 2},  #  0  2: -1  1:  1  1:  0 -2:  0 -1:  0 -1
+      %{game_id: 22, deck_id_first: 5, place_first: 1, deck_id_second: 6, place_second: 2},  #  0  2: -1  1:  1  1:  0 -2:  1 -1: -1 -1
 
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 5, place_second: 2}, #  0  2: +2 >1:  0  0:  0 -2: -2>-1
-
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 5, place_second: 2}, #  0  2:  0  1:  0  0:  0 -2:  0 -1
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 5, place_second: 2}, #  0  2:  0  1:  0  0:  0 -2:  0 -1
-      %{deck_id_first: 2, place_first: 1, deck_id_second: 5, place_second: 2}, #  0  2:  0  1:  0  0:  0 -2:  0 -1
-
+      #Reach limit
+      %{game_id: 23, deck_id_first: 3, place_first: 1, deck_id_second: 2, place_second: 2},  #  0  2: -2 >0:  2 >2:  0 -2:  1 -1: -1 -1
+      %{game_id: 24, deck_id_first: 3, place_first: 1, deck_id_second: 1, place_second: 2},  # -1  2:  0  0:  1  2:  0 -2:  1 -1: -1 -1
+      %{game_id: 25, deck_id_first: 3, place_first: 1, deck_id_second: 1, place_second: 2},  # -2> 1:  0  0:  1x 2:  0 -2:  1 -1: -1 -1
+      %{game_id: 26, deck_id_first: 5, place_first: 1, deck_id_second: 6, place_second: 2},  #  0  1:  0  0:  1  2:  0 -2:  2 >0: -2>-2
+      %{game_id: 27, deck_id_first: 4, place_first: 1, deck_id_second: 6, place_second: 2},  #  0  1:  0  0:  1  2:  1 -2:  0  0 -1 -2
+      %{game_id: 28, deck_id_first: 4, place_first: 1, deck_id_second: 6, place_second: 2},  #  0  1:  0  0:  1  2:  2>-1:  0  0: -1x-2
     ]
     
-    # assert %{1=> %{delta: 0, tier: 1}, 2=> %{delta: 0, tier: -1}, 3=> %{delta: 0, tier: 1}, 4=> %{delta: 0, tier: -1}} = MagiratorCalculator.trace_tier(results) #4
-    # assert %{1=> %{delta: 0, tier: 1}, 2=> %{delta: 0, tier: 0}, 3=> %{delta: 0, tier: 1}, 4=> %{delta: 0, tier: -2}} = MagiratorCalculator.trace_tier(results) #8
-    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 0}, 3=> %{delta: 0, tier: 0}, 4=> %{delta: 0, tier: -2}} = MagiratorCalculator.trace_tier(results) #12
-    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 1}, 3=> %{delta: 0, tier: 0}, 4=> %{delta: 0, tier: -2}, 5=> %{delta: 0, tier: -1}} = MagiratorCalculator.trace_tier(results) #15
-    assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 1}, 3=> %{delta: 0, tier: 0}, 4=> %{delta: 0, tier: -2}, 5=> %{delta: 0, tier: -1}} = MagiratorCalculator.trace_tier(results) #18
+    # assert %{1=> %{delta: 0, tier: 1}, 2=> %{delta: 0, tier: -1}, 3=> %{delta: 0, tier: 1}, 4=> %{delta: 0, tier: -1}} = MagiratorCalculator.trace_tier(results) #Normal behaviour
+    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 0}, 3=> %{delta: 0, tier: 0}, 4=> %{delta: 0, tier: -2}} = MagiratorCalculator.trace_tier(results) #Back and forth / further than +/-1
+    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 1}, 3=> %{delta: 0, tier: 0}, 4=> %{delta: 0, tier: -2}, 5=> %{delta: 0, tier: -1}} = MagiratorCalculator.trace_tier(results) #Not mutually dependent
+    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 1}, 3=> %{delta: 0, tier: 0}, 4=> %{delta: 0, tier: -2}, 5=> %{delta: 0, tier: -1}} = MagiratorCalculator.trace_tier(results) #Only valid matchups
+    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: -1, tier: 1}, 3=> %{delta: 1, tier: 1}, 4=> %{delta: 0, tier: -2}, 5=> %{delta: 1, tier: -1}, 6=> %{delta: -1, tier: -1}} = MagiratorCalculator.trace_tier(results) #Ending at odds
+    # assert %{1=> %{delta: 0, tier: 2}, 2=> %{delta: 0, tier: 0}, 3=> %{delta: 0, tier: 2}, 4=> %{delta: 0, tier: -2}, 5=> %{delta: 1, tier: -1}, 6=> %{delta: -1, tier: -1}} = MagiratorCalculator.trace_tier(results) #Reach limit
+    assert %{1=> %{delta: 0, tier: 1}, 2=> %{delta: 0, tier: 0}, 3=> %{delta: 1, tier: 2}, 4=> %{delta: 0, tier: -1}, 5=> %{delta: 0, tier: 0}, 6=> %{delta: -1, tier: -2}} = MagiratorCalculator.trace_tier(results) #Reach limit
   end
 
 
   @tag tier: true
   test "resolve tier change delta" do
-    result = %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
+    result = %{game_id:  00, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
     record = %{1 => %{delta: 0, tier: 0}, 2 => %{delta: 0, tier: 0}}
     
     assert %{1=> %{delta: 1, tier: 0}, 2=> %{delta: -1, tier: 0}} = MagiratorCalculator.resolve_tier_change(result, record)
@@ -384,7 +377,7 @@ defmodule MagiratorCalculatorTest do
 
   @tag tier: true
   test "resolve tier change tier" do
-    result = %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
+    result = %{game_id:  00, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
     record = %{1 => %{delta: 1, tier: 0}, 2 => %{delta: 1, tier: 0}}
     
     assert %{1=> %{delta: 0, tier: 1}, 2=> %{delta: 0, tier: 0}} = MagiratorCalculator.resolve_tier_change(result, record)
