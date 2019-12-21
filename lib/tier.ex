@@ -11,6 +11,21 @@ defmodule MagiratorCalculator.Tier do
     |> Enum.reduce(%{}, fn(x, m)-> Map.put(m, x, %{delta: 0, tier: 0}) end)
   end
 
+  def init_record(%{id: id_first, tier: tier_first, delta: delta_first}, %{id: id_second, tier: tier_second, delta: delta_second}) do
+    %{
+      id_first => %{delta: delta_first, tier: tier_first}, 
+      id_second => %{delta: delta_second, tier: tier_second}
+    }
+  end
+
+  @doc """
+  Constructs a result in the format that the module utilizes
+  %{game_id: x, deck_id_first: y, place_first: z, deck_id_second: y, place_second: z}
+  """
+  def construct_result(game_id, deck_id_first, place_first, deck_id_second, place_second) do
+    %{game_id: game_id, deck_id_first: deck_id_first, place_first: place_first, deck_id_second: deck_id_second, place_second: place_second}
+  end
+
 
   def validate({%{deck_id_first: deck_id_first, deck_id_second: deck_id_second} = result, record}) do
     case record[deck_id_first].tier == record[deck_id_second].tier do

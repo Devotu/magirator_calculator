@@ -184,6 +184,13 @@ defmodule MagiratorCalculator do
     Enum.reduce(results, T.init_record(results), fn r, acc -> resolve_tier_change(r, acc) end)
   end
 
+
+  def resolve_tier_change(deck_first, result_first, deck_second, result_second) do
+    record = T.init_record(deck_first, deck_second)
+    result = T.construct_result(result_first.game_id, result_first.deck_id, result_first.place, result_second.deck_id, result_second.place)
+    resolve_tier_change(result, record)
+  end
+
   def resolve_tier_change(result, record) do
     {result, record}
     |> T.validate()
@@ -191,5 +198,4 @@ defmodule MagiratorCalculator do
     |> T.shift_tiers()
     |> T.record_output()
   end
-
 end

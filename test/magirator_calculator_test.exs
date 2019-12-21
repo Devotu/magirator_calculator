@@ -314,7 +314,7 @@ defmodule MagiratorCalculatorTest do
   @tag tier: true
   test "trace tier" do
     results = [                                                 
-      #Normal behaviour                                                         #  0  0:  0  0:  0  0:  0  0:  0  0:  0  0
+      #Normal behaviour                                                                     #  0  0:  0  0:  0  0:  0  0:  0  0:  0  0
       %{game_id: 1, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2},  # +1  0: -1  0:  0  0:  0  0:  0  0:  0  0
       %{game_id: 2, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2},  # +2 >1: -2>-1:  0  0:  0  0:  0  0:  0  0
       %{game_id: 3, deck_id_first: 3, place_first: 1, deck_id_second: 4, place_second: 2},  #  0  1:  0 -1: +1  0: -1  0:  0  0:  0  0
@@ -369,7 +369,7 @@ defmodule MagiratorCalculatorTest do
 
   @tag tier: true
   test "resolve tier change delta" do
-    result = %{game_id:  00, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
+    result = %{game_id:  10, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
     record = %{1 => %{delta: 0, tier: 0}, 2 => %{delta: 0, tier: 0}}
     
     assert %{1=> %{delta: 1, tier: 0}, 2=> %{delta: -1, tier: 0}} = MagiratorCalculator.resolve_tier_change(result, record)
@@ -377,9 +377,47 @@ defmodule MagiratorCalculatorTest do
 
   @tag tier: true
   test "resolve tier change tier" do
-    result = %{game_id:  00, deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2} # +1  0: -1  0:  0  0:  0  0:  0  0
-    record = %{1 => %{delta: 1, tier: 0}, 2 => %{delta: 1, tier: 0}}
+    deck_first = %{id: 20, tier: 1, delta: 1}
+    deck_second = %{id: 23, tier: 1, delta: 0}
+
+    result_first = %{ 
+      player_id: 10, 
+      game_id: 40,
+      deck_id: 20,
+      place: 1,
+      comment: "As results look like when stored"
+    }
+
+    result_second = %{ 
+      player_id: 12, 
+      game_id: 40,
+      deck_id: 23,
+      place: 2
+    }
     
-    assert %{1=> %{delta: 0, tier: 1}, 2=> %{delta: 0, tier: 0}} = MagiratorCalculator.resolve_tier_change(result, record)
+    assert %{20=> %{delta: 0, tier: 2}, 23=> %{delta: -1, tier: 1}} = MagiratorCalculator.resolve_tier_change(deck_first, result_first, deck_second, result_second)
+  end
+
+  @tag tier: true
+  test "resolve tier change tier fail missmatch" do
+    deck_first = %{id: 20, tier: 1, delta: 1}
+    deck_second = %{id: 23, tier: 2, delta: 0}
+
+    result_first = %{ 
+      player_id: 10, 
+      game_id: 40,
+      deck_id: 20,
+      place: 1,
+      comment: "As results look like when stored"
+    }
+
+    result_second = %{ 
+      player_id: 12, 
+      game_id: 40,
+      deck_id: 23,
+      place: 2
+    }
+    
+    assert %{20=> %{delta: 1, tier: 1}, 23=> %{delta: 0, tier: 2}} = MagiratorCalculator.resolve_tier_change(deck_first, result_first, deck_second, result_second)
   end
 end

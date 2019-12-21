@@ -4,7 +4,7 @@ defmodule TierTest do
   alias MagiratorCalculator.Tier, as: Tier
 
   @tag init: true
-  test "initialize record" do
+  test "initialize record from list" do
     results = [                                                      #  0  0:  0  0:  0  0:  0  0:
       %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2}, # +1  0: -1  0:  0  0:  0  0:
       %{deck_id_first: 1, place_first: 1, deck_id_second: 2, place_second: 2}, # +2 >1: -2>-1:  0  0:  0  0:
@@ -13,6 +13,35 @@ defmodule TierTest do
     ]
 
     assert %{1 => %{delta: 0, tier: 0}, 2 => %{delta: 0, tier: 0}, 3 => %{delta: 0, tier: 0}, 4 => %{delta: 0, tier: 0}} == Tier.init_record(results)
+  end
+
+  @tag init: true
+  test "initialize record from specific" do
+    deck_first = %{id: 1, tier: 1, delta: 1}
+    deck_second = %{id: 2, tier: 1, delta: -1}
+
+    assert %{1 => %{delta: 1, tier: 1}, 2 => %{delta: -1, tier: 1}} == Tier.init_record(deck_first, deck_second)
+  end
+
+  @tag init: true
+  test "construct result from whatever" do
+    result_first = %{ 
+      player_id: 10, 
+      game_id: 40,
+      deck_id: 20,
+      place: 1,
+      comment: "As results look like when stored"
+    }
+
+    result_second = %{ 
+      player_id: 12, 
+      game_id: 40,
+      deck_id: 23,
+      place: 2
+    }
+
+    constructed_result = Tier.construct_result(result_first.game_id, result_first.deck_id, result_first.place, result_second.deck_id, result_second.place)
+    assert %{game_id: 40, deck_id_first: 20, place_first: 1, deck_id_second: 23, place_second: 2} == constructed_result
   end
 
 
