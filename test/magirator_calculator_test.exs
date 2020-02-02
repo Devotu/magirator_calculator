@@ -420,4 +420,47 @@ defmodule MagiratorCalculatorTest do
     
     assert %{20=> %{delta: 1, tier: 1}, 23=> %{delta: 0, tier: 2}} = MagiratorCalculator.resolve_tier_change(deck_first, result_first, deck_second, result_second)
   end
+
+
+  @tag color: true
+  test "count color occurances" do    
+    d1 = %{ 
+      name: "D1" , 
+      theme: "themy", 
+      format: "formaty", 
+      black: :true, 
+      white: :false, 
+      red: :false, 
+      green: :false, 
+      blue: :false, 
+      colorless: :false, 
+    }
+    
+    d2 = %{ 
+      name: "D2" , 
+      theme: "themy", 
+      format: "formaty", 
+      black: :true, 
+      white: :false, 
+      red: :false, 
+      green: :true, 
+      blue: :false, 
+      colorless: :false, 
+    }
+    
+    d3 = %{ 
+      name: "D3" , 
+      theme: "themy", 
+      format: "formaty", 
+      black: :true, 
+      white: :true, 
+      red: :false, 
+      green: :true, 
+      blue: :false, 
+      colorless: :false, 
+    }
+
+    decks = Enum.take_random([d1, d2, d3], 3)
+    assert %{black: 3, white: 1, red: 0, green: 2, blue: 0, colorless: 0} = MagiratorCalculator.count_color_occurances(decks)
+  end
 end

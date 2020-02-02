@@ -1,6 +1,7 @@
 defmodule MagiratorCalculator do
   alias MagiratorCalculator.Points, as: P
   alias MagiratorCalculator.Tier, as: T
+  alias MagiratorCalculator.Color, as: C
 
   #Exposed
   def calculate_summary_list_pdiff(results) when length(results) == 0 do
@@ -197,5 +198,10 @@ defmodule MagiratorCalculator do
     |> T.assign_deltas()
     |> T.shift_tiers()
     |> T.record_output()
+  end
+
+
+  def count_color_occurances(decks) when is_list decks do
+    C.count_color_occurances(decks)
   end
 end
