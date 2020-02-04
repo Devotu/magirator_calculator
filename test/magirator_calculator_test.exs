@@ -424,43 +424,36 @@ defmodule MagiratorCalculatorTest do
 
   @tag color: true
   test "count color occurances" do    
-    d1 = %{ 
-      name: "D1" , 
-      theme: "themy", 
-      format: "formaty", 
-      black: :true, 
-      white: :false, 
-      red: :false, 
-      green: :false, 
-      blue: :false, 
-      colorless: :false, 
-    }
-    
-    d2 = %{ 
-      name: "D2" , 
-      theme: "themy", 
-      format: "formaty", 
-      black: :true, 
-      white: :false, 
-      red: :false, 
-      green: :true, 
-      blue: :false, 
-      colorless: :false, 
-    }
-    
-    d3 = %{ 
-      name: "D3" , 
-      theme: "themy", 
-      format: "formaty", 
-      black: :true, 
-      white: :true, 
-      red: :false, 
-      green: :true, 
-      blue: :false, 
-      colorless: :false, 
-    }
+    d1 = %{name: "D1" , theme: "themy", format: "formaty", black: :true, white: :false, red: :false, green: :false, blue: :false, colorless: :false}
+    d2 = %{name: "D2" , theme: "themy", format: "formaty", black: :true, white: :false, red: :false, green: :true, blue: :false, colorless: :false}
+    d3 = %{name: "D3" , theme: "themy", format: "formaty", black: :true, white: :true, red: :false, green: :true, blue: :false, colorless: :false}
 
     decks = Enum.take_random([d1, d2, d3], 3)
     assert %{black: 3, white: 1, red: 0, green: 2, blue: 0, colorless: 0} = MagiratorCalculator.count_color_occurances(decks)
+  end
+
+
+  @tag color: true
+  test "count color composition" do    
+    d1 = %{name: "Black      ", theme: "1", format: "formaty", black: :true, white: :false, red: :false, green: :false, blue: :false, colorless: :false}
+    d2 = %{name: "Golgari I  ", theme: "2", format: "formaty", black: :true, white: :false, red: :false, green: :true, blue: :false, colorless: :false}
+    d3 = %{name: "Golgari II ", theme: "2", format: "formaty", black: :true, white: :false, red: :false, green: :true, blue: :false, colorless: :false}
+    d4 = %{name: "Golgari III", theme: "2", format: "formaty", black: :true, white: :false, red: :false, green: :true, blue: :false, colorless: :false}
+    d5 = %{name: "Izzet      ", theme: "2", format: "formaty", black: :false, white: :false, red: :true, green: :false, blue: :true, colorless: :false}
+    d6 = %{name: "Abzan      ", theme: "3", format: "formaty", black: :true, white: :true, red: :false, green: :true, blue: :false, colorless: :false}
+    d7 = %{name: "Witch      ", theme: "4", format: "formaty", black: :true, white: :true, red: :false, green: :true, blue: :true, colorless: :false}
+    d8 = %{name: "Five       ", theme: "5", format: "formaty", black: :true, white: :true, red: :true, green: :true, blue: :true, colorless: :false}
+    d9 = %{name: "Colorless  ", theme: "0", format: "formaty", black: :false, white: :false, red: :false, green: :false, blue: :false, colorless: :true}
+
+    decks = Enum.take_random([d1, d2, d3, d4, d5, d6, d7, d8, d9], 9)
+    assert [
+      %{count: 1, colors: {:black}},
+      %{count: 1, colors: {:colorless}},
+      %{count: 1, colors: {:red, :blue}},
+      %{count: 3, colors: {:black, :green}},
+      %{count: 1, colors: {:black, :white, :green}},
+      %{count: 1, colors: {:black, :white, :green, :blue}},
+      %{count: 1, colors: {:black, :white, :red, :green, :blue}},
+      ] = MagiratorCalculator.count_color_composition(decks)
   end
 end
