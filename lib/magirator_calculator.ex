@@ -206,7 +206,7 @@ defmodule MagiratorCalculator do
   end
 
 
-  def count_color_composition(decks) when is_list decks do
-    C.count_color_composition(decks)
+  def count_color_combinations(decks) when is_list decks do
+    C.count_color_combinations(decks)
   end
 end

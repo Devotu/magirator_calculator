@@ -37,15 +37,7 @@ defmodule MagiratorCalculator.Color do
   end
 
 
-      # assert [
-      # %{count: 1, colors: {:black}},
-      # %{count: 1, colors: {:red, :blue}},
-      # %{count: 2, colors: {:black, :green}},
-      # %{count: 1, colors: {:black, :white, :green}},
-      # ] == MagiratorCalculator.count_color_composition(decks)
-
-
-  def count_color_composition(decks) when is_list decks do
+  def count_color_combinations(decks) when is_list decks do
     count_combos(decks, %{})
     |> Enum.map(fn({k,v})-> %{count: v, colors: split_to_atoms(k)} end)
   end

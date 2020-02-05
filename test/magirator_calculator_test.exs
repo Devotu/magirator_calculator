@@ -434,7 +434,7 @@ defmodule MagiratorCalculatorTest do
 
 
   @tag color: true
-  test "count color composition" do    
+  test "count color combination" do    
     d1 = %{name: "Black      ", theme: "1", format: "formaty", black: :true, white: :false, red: :false, green: :false, blue: :false, colorless: :false}
     d2 = %{name: "Golgari I  ", theme: "2", format: "formaty", black: :true, white: :false, red: :false, green: :true, blue: :false, colorless: :false}
     d3 = %{name: "Golgari II ", theme: "2", format: "formaty", black: :true, white: :false, red: :false, green: :true, blue: :false, colorless: :false}
@@ -454,6 +454,6 @@ defmodule MagiratorCalculatorTest do
       %{count: 1, colors: {:black, :white, :red, :green, :blue}},
       %{count: 1, colors: {:colorless}},
       %{count: 1, colors: {:red, :blue}},
-      ] = MagiratorCalculator.count_color_composition(decks)
+      ] = MagiratorCalculator.count_color_combinations(decks)
   end
 end
