@@ -47,6 +47,7 @@ defmodule MagiratorCalculator.Color do
 
   def count_color_composition(decks) when is_list decks do
     count_combos(decks, %{})
+    |> Enum.map(fn({k,v})-> %{count: v, colors: split_to_atoms(k)} end)
   end
 
 
@@ -79,46 +80,46 @@ defmodule MagiratorCalculator.Color do
 
 
   #All
-  defp combo(%{black: :true, white: :true, red: :true, green: :true, blue: :true}), do: :black_white_red_green_blue
+  defp combo(%{black: :true, white: :true, red: :true, green: :true, blue: :true}), do: "black_white_red_green_blue"
 
   #Quads
-  defp combo(%{black: :true, white: :true, red: :true, green: :true}), do: :black_white_red_green
-  defp combo(%{black: :true, white: :true, red: :true, blue: :true}), do: :black_white_red_blue
-  defp combo(%{black: :true, white: :true, green: :true, blue: :true}), do: :black_white_green_blue
-  defp combo(%{black: :true, red: :true, green: :true, blue: :true}), do: :black_red_green_blue
-  defp combo(%{white: :true, red: :true, green: :true, blue: :true}), do: :white_red_green_blue
+  defp combo(%{black: :true, white: :true, red: :true, green: :true}), do: "black_white_red_green"
+  defp combo(%{black: :true, white: :true, red: :true, blue: :true}), do: "black_white_red_blue"
+  defp combo(%{black: :true, white: :true, green: :true, blue: :true}), do: "black_white_green_blue"
+  defp combo(%{black: :true, red: :true, green: :true, blue: :true}), do: "black_red_green_blue"
+  defp combo(%{white: :true, red: :true, green: :true, blue: :true}), do: "white_red_green_blue"
 
   #Triplets
-  defp combo(%{black: :true, white: :true, red: :true}), do: :black_white_red
-  defp combo(%{black: :true, white: :true, green: :true}), do: :black_white_green
-  defp combo(%{black: :true, white: :true, blue: :true}), do: :black_white_blue
-  defp combo(%{black: :true, red: :true, green: :true}), do: :black_red_green
-  defp combo(%{black: :true, red: :true, blue: :true}), do: :black_red_blue
-  defp combo(%{black: :true, green: :true, blue: :true}), do: :black_green_blue
-  defp combo(%{white: :true, red: :true, green: :true}), do: :white_red_green
-  defp combo(%{white: :true, red: :true, blue: :true}), do: :white_red_blue
-  defp combo(%{white: :true, green: :true, blue: :true}), do: :white_red_blue
-  defp combo(%{red: :true, green: :true, blue: :true}), do: :red_red_blue
+  defp combo(%{black: :true, white: :true, red: :true}), do: "black_white_red"
+  defp combo(%{black: :true, white: :true, green: :true}), do: "black_white_green"
+  defp combo(%{black: :true, white: :true, blue: :true}), do: "black_white_blue"
+  defp combo(%{black: :true, red: :true, green: :true}), do: "black_red_green"
+  defp combo(%{black: :true, red: :true, blue: :true}), do: "black_red_blue"
+  defp combo(%{black: :true, green: :true, blue: :true}), do: "black_green_blue"
+  defp combo(%{white: :true, red: :true, green: :true}), do: "white_red_green"
+  defp combo(%{white: :true, red: :true, blue: :true}), do: "white_red_blue"
+  defp combo(%{white: :true, green: :true, blue: :true}), do: "white_red_blue"
+  defp combo(%{red: :true, green: :true, blue: :true}), do: "red_red_blue"
 
   #Dual
-  defp combo(%{black: :true, white: :true}), do: :black_white
-  defp combo(%{black: :true, red: :true}), do: :black_red
-  defp combo(%{black: :true, green: :true}), do: :black_green
-  defp combo(%{black: :true, blue: :true}), do: :black_blue
-  defp combo(%{white: :true, red: :true}), do: :white_red
-  defp combo(%{white: :true, green: :true}), do: :white_green
-  defp combo(%{white: :true, blue: :true}), do: :white_blue
-  defp combo(%{red: :true, green: :true}), do: :red_green
-  defp combo(%{red: :true, blue: :true}), do: :red_blue
-  defp combo(%{green: :true, blue: :true}), do: :green_blue
+  defp combo(%{black: :true, white: :true}), do: "black_white"
+  defp combo(%{black: :true, red: :true}), do: "black_red"
+  defp combo(%{black: :true, green: :true}), do: "black_green"
+  defp combo(%{black: :true, blue: :true}), do: "black_blue"
+  defp combo(%{white: :true, red: :true}), do: "white_red"
+  defp combo(%{white: :true, green: :true}), do: "white_green"
+  defp combo(%{white: :true, blue: :true}), do: "white_blue"
+  defp combo(%{red: :true, green: :true}), do: "red_green"
+  defp combo(%{red: :true, blue: :true}), do: "red_blue"
+  defp combo(%{green: :true, blue: :true}), do: "green_blue"
 
   #Mono
-  defp combo(%{black: :true}), do: :black
-  defp combo(%{white: :true}), do: :white
-  defp combo(%{red: :true}), do: :red
-  defp combo(%{green: :true}), do: :green
-  defp combo(%{blue: :true}), do: :blue
+  defp combo(%{black: :true}), do: "black"
+  defp combo(%{white: :true}), do: "white"
+  defp combo(%{red: :true}), do: "red"
+  defp combo(%{green: :true}), do: "green"
+  defp combo(%{blue: :true}), do: "blue"
 
   #None
-  defp combo(%{}), do: :colorless
+  defp combo(%{}), do: "colorless"
 end
